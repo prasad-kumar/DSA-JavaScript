@@ -1,6 +1,5 @@
 
-
-let numberArray = [45,56,86,256,865];
+//binary search
 
 function binarySearch(array, target) {
   let left = 0;
@@ -22,4 +21,6 @@ function binarySearch(array, target) {
   return -1;
 }
 
-console.log(binarySearch(numberArray, 256));
+let numberArray = [1,2,3,4,5,6,7,8,9];
+
+console.log(binarySearch(numberArray, 4));
