@@ -61,6 +61,7 @@ class Node {
         node.next.prev = node;
       }
       previous.next = node;
+      this.size++;
     }
   
     removeNodeAt(idx) {
@@ -70,6 +71,7 @@ class Node {
   
       if (idx === 0) {
         this.head = this.head.next;
+        this.size--;
         return;
       }
       let current = this.head;
@@ -82,6 +84,7 @@ class Node {
       }
       previous.next = current.next;
       current.next.prev = previous;
+      this.size--;
     }
   
     printForward() {
@@ -92,9 +95,7 @@ class Node {
       let llstr = "";
       let current = this.head;
       while (current) {
-        llstr += current.next
-          ? String(current.data) + " --> "
-          : String(current.data);
+        llstr += current.next ? String(current.data) + " --> " : String(current.data);
         current = current.next;
       }
       console.log(llstr);
@@ -116,9 +117,7 @@ class Node {
       let llstr = "";
       let current = this.getLastNode();
       while (current) {
-        llstr += current.prev
-          ? String(current.data) + " <-- "
-          : String(current.data);
+        llstr += current.prev ? String(current.data) + " <-- " : String(current.data);
         current = current.prev;
       }
       console.log(llstr);
@@ -138,25 +137,25 @@ class Node {
   
   dl.printForward();
   dl.printBackward();
-  
+  console.log('size : ',dl.size);
+
   dl.atIndex(3, 2);
   
   dl.printForward();
   dl.printBackward();
+  console.log('size : ',dl.size);
   
   dl.removeNodeAt(1);
-  
+
   dl.printForward();
   dl.printBackward();
-  
-  console.log(dl.size);
+  console.log('size : ',dl.size);
   
   dl.clearlist();
   
-  console.log(dl.size);
-  
   dl.printForward();
   dl.printBackward();
+  console.log('size : ',dl.size);
   
   
   
