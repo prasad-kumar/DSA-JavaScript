@@ -7,8 +7,8 @@ class Graph {
       this.edges = edges;
       this.graphObj = {};
   
-      for (let arr of this.edges) {
-        let [start, end] = arr;
+      for (let [start, end] of this.edges) {
+        // let [start, end] = arr;
         if (this.graphObj[start] === undefined) {
           this.graphObj[start] = [end];
         } else {
