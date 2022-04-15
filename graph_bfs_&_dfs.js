@@ -23,10 +23,10 @@ class Graph {
       queue.push(start);
   
       while (queue.length !== 0) {
-        let startNode = queue.shift();
-        path.push(startNode);
+        let vertex = queue.shift();
+        path.push(vertex);
   
-        for (let [key, value] of Object.entries(this.graphObj)) {
+        for (let key of this.graphObj[vertex]) {
             if (!(visited.includes(key))){
                 visited.push(key);
                 queue.push(key);
