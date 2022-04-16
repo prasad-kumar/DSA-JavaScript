@@ -1,78 +1,109 @@
-// Graph in JavaScript
+// undirected graph implementaion
 
 class Graph {
-    constructor(vertices, edges) {
-      this.vertices = vertices;
-      this.edges = edges;
-      this.graphObj = {};
-  
-      for (let [start, end] of this.edges) {
-        if (this.graphObj[start] === undefined) {
-          this.graphObj[start] = [end];
-        } else {
-          this.graphObj[start].push(end);
-        }
-      }
-    }
-  
-    bfs(start) {
-      const visited = [];
-      const queue = [];
-      const path = [];
-      visited.push(start);
-      queue.push(start);
-  
-      while (queue.length !== 0) {
-        let vertex = queue.shift();
-        path.push(vertex);
-  
-        for (let key of this.graphObj[vertex]) {
-            if (!(visited.includes(key))){
-                visited.push(key);
-                queue.push(key);
-            }
-        }
-      }
-      return path
-    }
-  
-    dfs(start){
-        const stack = [start];
-        const path = [];
-  
-        while(stack.length !== 0){
-            let vertix = stack.pop();
-            if (path.includes(vertix)){
-                continue;
-            }
-            path.push(vertix);
-            for (let i of this.graphObj[vertix]){
-                stack.push(i)
-            }
-        }
-  
-        return path
-    }
-  
+  constructor() {
+    this.adjList = new Map();
   }
-  
-  let cities = ["Mumbai", "Paris", "Dubai", "New York", "Torrento"];
-  
-  let routes = [
-    ["Mumbai", "Paris"],
-    ["Mumbai", "Dubai"],
-    ["Paris", "Dubai"],
-    ["Paris", "New York"],
-    ["Dubai", "Paris"],
-    ["Dubai", "New York"],
-    ["New York", "Torrento"],
-    ["Torrento", "New York"],
-  ];
-  
-  g = new Graph(cities, routes);
-  
-  console.log('BFS :', g.bfs('Mumbai'));
-  console.log('DFS :', g.dfs('Dubai'));
-  
-  
-  
+
+  addNode = (node) => {
+    this.adjList.set(node, []);
+  };
+
+  // add edge,undirected
+  addEdge = (origin, destination) => {
+    this.adjList.get(origin).push(destination);
+    this.adjList.get(destination).push(origin);
+  };
+
+  // BFS
+  bfs = (start) => {
+    const visited = new Set();
+
+    const queue = [start];
+    visited.add(start);
+
+    while (queue.length > 0) {
+      const airport = queue.shift();
+      const destinations = this.adjList.get(airport);
+
+      for (let destination of destinations) {
+        if (!visited.has(destination)) {
+          queue.push(destination);
+          visited.add(destination);
+        }
+      }
+    }
+    return visited;
+  };
+
+  // DFS
+  dfs(start, end, visited = new Set()) {
+    visited.add(start);
+
+    for (let destination of this.adjList.get(start)) {
+
+      if (start === end){
+          console.log('FOUND IT');
+          return
+      }  
+      if (!visited.has(destination)) {
+        this.dfs(destination, end, visited);
+      }
+    }
+    return visited
+  }
+
+  // to get all available routes to destination
+  getPaths(start, end, path = []) {
+    path = path.concat(start);
+
+    if (start === end) {
+      return [path];
+    }
+
+    if (!this.adjList.has(start)) {
+      return [];
+    }
+
+    let paths = [];
+    for (let destination of this.adjList.get(start)) {
+      if (!path.includes(destination)) {
+        let newPaths = this.getPaths(destination, end, path);
+
+        for (let p of newPaths) {
+          paths.push(p);
+        }
+      }
+    }
+
+    return paths;
+  }
+}
+
+const airports = "HYD BLR CHN MUM DLH KLK".split(" ");
+
+const routes = [
+  ["HYD", "BLR"],
+  ["HYD", "CHN"],
+  ["HYD", "MUM"],
+  ["HYD", "KLK"],
+  ["BLR", "CHN"],
+  ["MUM", "DLH"],
+  ["KLK", "DLH"],
+];
+
+const g = new Graph();
+
+airports.forEach(g.addNode);
+
+routes.forEach((route) => g.addEdge(...route));
+
+console.log(g.adjList);
+
+console.log(g.bfs('HYD', 'DLH'));
+
+console.log(g.dfs('KLK', 'BLR'));
+
+console.log(g.getPaths('HYD', 'DLH'));
+
+
