@@ -50,7 +50,7 @@ class BinarySearchTree {
   search(data) {
     if (data < this.data) {
       if (this.left === null) {
-        return "NOT FOUND";
+        return "NOT FOUND IN TREE";
       }
       return this.left.search(data);
     } else if (data > this.data) {
